@@ -1,0 +1,135 @@
+import pandas as pd
+
+data = pd.read_csv(r'E:\AICP\Internship\Week 6\Assets\births.csv')
+
+print(data.columns)
+
+data['year'] = pd.to_datetime(data['year']).dt.year
+
+data['Decade'] = (data['year'] // 10) * 10
+
+print(data.head())
+
+
+Task 2
+
+import pandas as pd
+
+data = pd.read_csv(r'E:\AICP\Internship\Week 6\Assets\births.csv')
+
+statistics = data.describe()
+
+print(statistics)
+
+Task 3
+
+import pandas as pd
+
+data = pd.read_csv(r'E:\AICP\Internship\Week 6\Assets\births.csv')
+
+missing_values = data.isna().sum()
+
+print("Missing values in each column:")
+print(missing_values)
+
+Task 4
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = pd.read_csv(r'E:\AICP\Internship\Week 6\Assets\births.csv')
+
+data['year'] = pd.to_datetime(data['year']).dt.year
+
+data['Decade'] = (data['year'] // 10) * 10
+
+births_by_decade_gender = data.groupby(['Decade', 'gender']).size().unstack(fill_value=0)
+
+births_by_decade_gender.plot(kind='line', marker='o')
+plt.title('Trend of Male and Female Births Every Decade')
+plt.xlabel('Decade')
+plt.ylabel('Number of Births')
+plt.xticks(births_by_decade_gender.index)
+plt.legend(title='Gender')
+plt.grid(True)
+plt.show()
+
+
+Task 5
+
+
+import pandas as pd
+
+data = pd.read_csv(r'E:\AICP\Internship\Week 6\Assets\births.csv')
+
+mean = data['births'].mean()
+std_dev = data['births'].std()
+
+lower_bound = mean - 5 * std_dev
+upper_bound = mean + 5 * std_dev
+
+filtered_data = data[(data['births'] >= lower_bound) & (data['births'] <= upper_bound)]
+
+print("Original data shape:", data.shape)
+print("Filtered data shape:", filtered_data.shape)
+
+Task 6
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+data = pd.read_csv(r'E:\AICP\Internship\Week 6\Assets\births.csv')
+
+data['day'] = pd.to_datetime(data[['year', 'month', 'day']], errors='coerce', dayfirst=True)
+
+data.dropna(subset=['day'], inplace=True)
+
+data['weekday'] = data['day'].dt.weekday
+
+data['decade'] = (data['year'] // 10) * 10
+
+births_by_weekday_decade = data.groupby(['decade', 'weekday']).size().unstack(fill_value=0)
+
+births_by_weekday_decade.plot(kind='bar', stacked=True)
+plt.title('Births by Weekday for Several Decades')
+plt.xlabel('Decade')
+plt.ylabel('Number of Births')
+plt.xticks(range(len(births_by_weekday_decade.index)), births_by_weekday_decade.index)
+plt.legend(title='Weekday', loc='upper right', bbox_to_anchor=(1.2, 1))
+plt.show()
+
+
+Task 7
+import pandas as pd
+
+
+births_by_month = data.groupby('month')['births'].sum()
+
+births_by_day = data.groupby('day')['births'].sum()
+
+print("Births by Month:")
+print(births_by_month)
+
+print("\nBirths by Day:")
+print(births_by_day)
+
+Task 8
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+data = {
+    'Date': pd.date_range(start='1/1/2012', periods=12, freq='M'),
+    'Births': [4000, 4200, 3800, 4400, 4500, 4600, 4200, 4800, 5200, 4900, 5000, 4700]
+}
+df = pd.DataFrame(data)
+
+plt.figure(figsize=(10, 5))
+plt.plot(df['Date'], df['Births'], label='Births', color='blue')
+
+plt.title('Average Number of Births by Date of Year')
+plt.xlabel('Month')
+plt.ylabel('Number of Births')
+plt.legend()
+plt.grid(True)
+plt.show()
